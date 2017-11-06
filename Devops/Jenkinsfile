@@ -9,7 +9,7 @@ pipeline {
  
       environment {
         //CI-CD config
-        // REPO ='http://github.com/cocoaheadsru/server/'
+         REPO ='http://github.com/cocoaheadsru/server/'
         // BRANCH = '*/develop'
         
         //Local paths
