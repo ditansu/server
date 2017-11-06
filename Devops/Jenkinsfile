@@ -12,14 +12,14 @@ pipeline {
         // REPO ='http://github.com/cocoaheadsru/server/'
         // BRANCH = '*/develop'
         
-        //Local paths   
+        //Local paths
         //BASE_DIR = pwd() //'/home/jenkins/ch-stage'
         //WS_DIR ='workspace/ch-server'
         WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
         SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
         //MySQL config
-        MYSQL_CONFIG = "/home/jenkins/ch-stage/scriptsmysql.json"
+        MYSQL_CONFIG = "/home/jenkins/ch-stage/scripts/mysql.json"
         SERVER_CONFIG_DIR = "${WORK_DIR}/Config/secrets/"
 
         //Build config
