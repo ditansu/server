@@ -9,17 +9,17 @@ pipeline {
  
       environment {
         //CI-CD config
-       // REPO ='http://github.com/cocoaheadsru/server/'
-       // BRANCH = '*/develop'
+        // REPO ='http://github.com/cocoaheadsru/server/'
+        // BRANCH = '*/develop'
         
         //Local paths   
-        BASE_DIR = '/home/jenkins/ch-stage'
-        WS_DIR ='workspace/ch-server'
-        WORK_DIR = "${BASE_DIR}/${WS_DIR}"
-        SCRIPTS_DIR = "${BASE_DIR}/scripts"
+        //BASE_DIR = pwd() //'/home/jenkins/ch-stage'
+        //WS_DIR ='workspace/ch-server'
+        WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
+        SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
         //MySQL config
-        MYSQL_CONFIG = "${SCRIPTS_DIR}/mysql.json"
+        MYSQL_CONFIG = "/home/jenkins/ch-stage/scriptsmysql.json"
         SERVER_CONFIG_DIR = "${WORK_DIR}/Config/secrets/"
 
         //Build config
