@@ -8,8 +8,8 @@ pipeline {
       }   
  
       environment {
-        //CI-CD config
-         REPO ='http://github.com/cocoaheadsru/server/'
+        // CI-CD config
+        // REPO ='http://github.com/cocoaheadsru/server/'
         // BRANCH = '*/develop'
         
         //Local paths
