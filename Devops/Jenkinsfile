@@ -1,17 +1,18 @@
 #!groovy
 
-def WORK_NODE = ''
+node {
+    def WORK_NODE = ''
 
-println "Branch ${env.GIT_BRANCH} or ${BRANCH_NAME}"
+    println "Branch ${env.GIT_BRANCH} or ${BRANCH_NAME}"
 
-if(BRANCH_NAME == 'origin/devops_develop'){
-    WORK_NODE = "chstage-node"
-} else {
-    WORK_NODE = "chprod-node"
+    if(GIT_BRANCH == 'origin/devops_develop'){
+        WORK_NODE = "chstage-node"
+    } else {
+        WORK_NODE = "chprod-node"
+    }
+
+    println "Work node is ${WORK_NODE}"
 }
-
-println "Work node is ${WORK_NODE}"
-
 
 pipeline {
 
