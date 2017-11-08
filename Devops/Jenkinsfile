@@ -1,4 +1,12 @@
 #!groovy
+
+def WORK_NODE = ''
+
+if(env.GIT_BRACH == 'origin/devops_develop'){
+    WORK_NODE = 'chstage-node'
+}
+
+
 pipeline {
 
       environment {
@@ -7,7 +15,7 @@ pipeline {
         // BRANCH = '*/develop'
 
         //Node
-        WORK_NODE='' //depend from branch
+        //WORK_NODE='' //depend from branch
         //Local paths
         WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
         SCRIPTS_DIR = "${WORK_DIR}/Devops"
@@ -31,9 +39,6 @@ pipeline {
 
       } // env
 
-        if(env.GIT_BRACH == 'origin/devops_develop'){
-            WORK_NODE = 'chstage-node'
-        }
 
         agent {
             node {
