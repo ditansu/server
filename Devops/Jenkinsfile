@@ -15,7 +15,7 @@ node {
     println "Work node is ${WORK_NODE}"
 
 }
-
+/*
 pipeline {
 
       environment {
@@ -224,4 +224,5 @@ pipeline {
         echo ' FAILURE!'
       }
     } // post
-} //pipeline 
+} //pipeline
+*/
