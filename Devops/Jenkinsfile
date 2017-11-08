@@ -2,17 +2,18 @@
 
 node {
 
-    def WORK_NODE = ''
+    println "Hello world from di!"
+    //def WORK_NODE = ''
 
-    println "Branch ${env.GIT_BRANCH} or ${BRANCH_NAME} dd"
-
+    //println "Branch ${env.GIT_BRANCH} or ${BRANCH_NAME} dd"
+/*
     if (env.GIT_BRANCH.consits("develop")){  // 'origin/devops_develop'
         WORK_NODE = "chstage-node"
     } else {
         WORK_NODE = "chprod-node"
     }
-
-    println "Work node is ${WORK_NODE}"
+*/
+    //println "Work node is ${WORK_NODE}"
 }
 
 
