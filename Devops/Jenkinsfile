@@ -2,7 +2,9 @@
 
 def WORK_NODE = ''
 
-if(env.GIT_BRANCH.contains("devops_develop")){
+println "Branch is ${env.GIT_BRANCH}"
+
+if(env.GIT_BRANCH == "origin/devops_develop")){
     WORK_NODE = "chstage-node"
 } else {
     WORK_NODE = "chprod-node"
