@@ -1,8 +1,6 @@
 #!groovy
 pipeline {
 
-
- 
       environment {
         // CI-CD config
         // REPO ='http://github.com/cocoaheadsru/server/'
@@ -50,7 +48,7 @@ pipeline {
           
           steps{
             //sh 'printenv'
-            echo "Start checkout for branch: {$env.GIT_BRACH} node: {$env.NODE_NAME} commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}""
+            echo "Start checkout for branch: {$env.GIT_BRACH} node: {$env.NODE_NAME} commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
 
             slackSend(
                 color: 'good',
