@@ -1,21 +1,16 @@
 #!groovy
 pipeline {
 
-      agent {
-        node {
-          label 'chstage-node'
-          customWorkspace 'workspace/ch-server'
-        }   
-      }   
+
  
       environment {
         // CI-CD config
         // REPO ='http://github.com/cocoaheadsru/server/'
         // BRANCH = '*/develop'
-        
+
+        //Node
+        WORK_NODE='' //depend from branch
         //Local paths
-        //BASE_DIR = pwd() //'/home/jenkins/ch-stage'
-        //WS_DIR ='workspace/ch-server'
         WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
         SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
@@ -36,15 +31,31 @@ pipeline {
         //Rollback config
         DEPLOY_STATUS = "SUCCESS"
 
-      } // env 
+      } // env
 
-      stages {
-      
+        if(env.GIT_BRACH == 'origin/devops_develop'){
+            WORK_NODE = 'chstage-node'
+        }
+
+        agent {
+            node {
+                label "${env.WORK_NODE}"
+                customWorkspace 'workspace/ch-server'
+            }
+        }
+
+    stages {
+
         stage('1. CHECKOUT STAGE') {
           
           steps{
             //sh 'printenv'
-            echo "Start checkout by url: '${env.GIT_URL}' branch '${env.BRANCH_NAME}' bracnh2 ${GIT_BRANCH}"
+            echo "Start checkout for branch: {$env.GIT_BRACH} node: {$env.NODE_NAME} commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}""
+
+            slackSend(
+                color: 'good',
+                message: "Start pipeline for {$env.GIT_BRACH} on node '{$env.NODE_NAME}' commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+            )
             echo "========================"
             sh 'printenv'
             echo "========================"
@@ -69,7 +80,7 @@ pipeline {
               success {
                   slackSend(
                       color: 'good',
-                      message: "1 of 3 Chekout SUCCESS - ${env.JOB_NAME} ${env.BUILD_NUMBER}  ${env.BUILD_URL}"
+                      message: "1 of 3 Chekout SUCCESS"
                   )
               }
               
@@ -77,7 +88,7 @@ pipeline {
                   slackSend(
                       color: 'danger',
                       failOnError: true,
-                      message: "Chekout FAILURE - ${env.JOB_NAME} ${env.BUILD_NUMBER}  ${env.BUILD_URL}"
+                      message: "1 of 3 Chekout FAILURE"
                   )
               }
 
@@ -96,14 +107,14 @@ pipeline {
            success {
             slackSend( 
                     color: 'good', 
-                    message: "2 of 3 Build SUCCESS - ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+                    message: "2 of 3 Build SUCCESS"
             )
            } 
            failure {
             slackSend(
                     color: 'danger', 
                     failOnError: true, 
-                    message: "2 of 3 Build FAILURE - ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+                    message: "2 of 3 Build FAILURE"
             ) 
            } 
           }//post 
@@ -122,7 +133,7 @@ pipeline {
                 always {
                   slackSend( 
                     color: 'good', 
-                    message: "3 of 3 Deploy ${env.DEPLOY_STATUS} - ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+                    message: "3 of 3 Deploy ${env.DEPLOY_STATUS}"
                   )
                 }
 
@@ -165,7 +176,7 @@ pipeline {
                     slackSend( 
                       color: 'waring', 
                       failOnError: true,
-                      message: "Rollback SUCCESS - ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+                      message: "Rollback  SUCCESS"
                     )
 
                 } 
@@ -174,7 +185,7 @@ pipeline {
                     slackSend(
                       color: 'danger',  
                       failOnError: true,
-                      message: "Rollback FAILURE please ask ditansu@gmail.com - ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+                      message: "Rollback is FAILURE please access to ditansu@gmail.com "
                     ) 
                 }   
             }//post 
