@@ -2,9 +2,9 @@
 
 def WORK_NODE = ''
 
-println "Branch ${env.GIT_BRANCH} or ${env.BRANCH_NAME}"
+println "Branch ${env.GIT_BRANCH} or ${BRANCH_NAME}"
 
-if(GIT_BRANCH == "origin/devops_develop"){
+if(BRANCH_NAME == 'origin/devops_develop'){
     WORK_NODE = "chstage-node"
 } else {
     WORK_NODE = "chprod-node"
