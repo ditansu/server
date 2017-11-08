@@ -6,7 +6,7 @@ node {
 
     println "Branch ${env.GIT_BRANCH} or ${BRANCH_NAME}"
 
-    if(GIT_BRANCH == 'origin/devops_develop'){
+    if (env.GIT_BRANCH.consits("develop")){  // 'origin/devops_develop'
         WORK_NODE = "chstage-node"
     } else {
         WORK_NODE = "chprod-node"
