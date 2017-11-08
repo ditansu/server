@@ -2,14 +2,17 @@ import Vapor
 
 extension Droplet {
     func setupRoutes() throws {
+        
+        let testVersion = 5
+        
         get("hello") { req in
             var json = JSON()
-            try json.set("hello", "world 4")
+            try json.set("hello", "world \(testVersion)")
             return json
         }
 
         get("plaintext") { req in
-            return "Hello, world 4!"
+            return "Hello, world \(testVersion)!"
         }
 
         // response to requests to /info domain

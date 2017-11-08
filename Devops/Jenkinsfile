@@ -1,3 +1,4 @@
+#!groovy
 pipeline {
 
       agent {
@@ -43,8 +44,11 @@ pipeline {
           
           steps{
             //sh 'printenv'
-            echo "Start checkout by url: '${env.GIT_URL}' branch '${env.BRANCH_NAME}'"
-            checkout scm 
+            echo "Start checkout by url: '${env.GIT_URL}' branch '${env.BRANCH_NAME}' bracnh2 ${GIT_BRANCH}"
+            echo "========================"
+            sh 'printenv'
+            echo "========================"
+            checkout scm
           /*  checkout(
                     changelog: false, 
                     poll: false, 
