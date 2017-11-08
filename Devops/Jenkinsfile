@@ -15,6 +15,7 @@ node {
     println "Work node is ${WORK_NODE}"
 
 }
+
 /*
 pipeline {
 
