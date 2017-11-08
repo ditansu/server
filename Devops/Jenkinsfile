@@ -12,8 +12,7 @@ node {
         WORK_NODE = "chprod-node"
     }
 
-    println "Work node is ${WORK_NODE}"
-
+  //  println "Work node is ${WORK_NODE}"
 }
 
 /*
