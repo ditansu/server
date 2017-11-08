@@ -10,7 +10,7 @@ node {
     //def WORK_NODE = ''
     println "Branch ${env.GIT_BRANCH}"
     sh "echo ${env.BRANCH_NAME}"
-    sh "echo $${env.GIT_BRANCH}"
+    sh "echo ${env.GIT_BRANCH}"
     //println BRANCH_NAME //"Branch ${env.BRANCH_NAME}"
 
 /*
