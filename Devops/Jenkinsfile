@@ -1,12 +1,11 @@
 #!groovy
 
 def WORK_NODE = ''
-def TEST_VAR = "shedon"
 
-if(env.GIT_BRACH == 'origin/devops_develop'){
-    WORK_NODE = 'chstage-node'
+if(env.GIT_BRANCH == 'origin/devops_develop'){
+    WORK_NODE = "chstage-node"
 } else {
-    TEST_VAR = "sanny"
+    WORK_NODE = "chprod-node"
 }
 
 pipeline {
@@ -55,14 +54,11 @@ pipeline {
           
           steps{
             //sh 'printenv'
-            echo "----------"
-echo "Node: ${WORK_NODE}, test var 1st: ${env.TEST_VAR}, test var 1st: ${TEST_VAR}"
-            echo "----------"
-            echo "Start checkout for branch: {$env.GIT_BRACH} node: {$env.NODE_NAME} commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+            echo "Start checkout for branch: {$env.GIT_BRANCH} node: {$env.NODE_NAME} commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
 
             slackSend(
                 color: 'good',
-                message: "Start pipeline for {$env.GIT_BRACH} on node '{$env.NODE_NAME}' commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+                message: "Start pipeline for {$env.GIT_BRANCH} on node {$env.NODE_NAME} commit: ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
             )
             echo "========================"
             sh 'printenv'
