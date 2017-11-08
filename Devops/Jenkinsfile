@@ -2,11 +2,14 @@
 
 def WORK_NODE = ''
 
-if(env.GIT_BRANCH == "origin/devops_develop"){
+if(env.GIT_BRANCH.contains("devops_develop")){
     WORK_NODE = "chstage-node"
 } else {
     WORK_NODE = "chprod-node"
 }
+
+println "Work node is ${WORK_NODE}"
+
 
 pipeline {
 
