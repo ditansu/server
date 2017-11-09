@@ -20,7 +20,10 @@ node(WORK_NODE){
 
   stage("0 of 3 Set environment"){
     //Local paths
-    WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
+    sh "cd ../"
+    CURR_DIR = pwd()
+    WS_DIR = "ch-server"
+    WORK_DIR = "${CURR_DIR}/${WS_DIR}" //"${BASE_DIR}/${WS_DIR}"
     SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
     //MySQL config
@@ -48,7 +51,7 @@ node(WORK_NODE){
         def COMMIT_MESSAGE = commitMessage()
         slackSend(
           color: 'good',
-          message: "Start pipeline for {$env.BRANCH_NAME} on node {$env.NODE_NAME} commit: ${COMMIT_MESSAGE} ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+          message: "Start pipeline for {$env.BRANCH_NAME} on node {$env.NODE_NAME} commit message: '${COMMIT_MESSAGE}' Job description ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
         )
         echo "Start checkout on node: ${WORK_NODE}"
         checkout scm
