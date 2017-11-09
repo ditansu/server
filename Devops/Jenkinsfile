@@ -25,7 +25,7 @@ pipeline{
             WORK_NODE = "chstage-node"
         }
 
-        sh "echo NODE: ${env.WORK_NODE}
+        sh "echo NODE: ${env.WORK_NODE}"
     }
 
     stages{
