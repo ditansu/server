@@ -1,18 +1,16 @@
 #!groovy
 
-node {
-
-    checkout scm
-
     println "Hello world from di!"
     //def WORK_NODE = ''
-    println "Branch ${env.GIT_BRANCH}"
-    sh "echo ${env.BRANCH_NAME}"
-    sh "echo ${env.GIT_BRANCH}"
+    println "Branch ${env.BRANCH_NAME}"
+sh "echo ${env.BRANCH_NAME} echo ${env.GIT_MESSAGE}"
 
-    if (BRANCH_NAME == 'origin/devops_develop') {
+    if (BRANCH_NAME == 'devops_develop') {
         println "ta da!!"
     }
+
+ sh 'printenv'
+
     //println BRANCH_NAME //"Branch ${env.BRANCH_NAME}"
 
 /*
@@ -23,6 +21,3 @@ node {
     }
 */
     //println "Work node is ${WORK_NODE}"
-}
-
-
