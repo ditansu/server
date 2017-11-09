@@ -1,15 +1,31 @@
 #!groovy
 
+node {
     println "Hello world from di!"
-    //def WORK_NODE = ''
+    def WORK_NODE = ''
     println "Branch ${env.BRANCH_NAME}"
-sh "echo ${env.BRANCH_NAME} echo ${env.GIT_MESSAGE}"
+    sh "echo ${env.BRANCH_NAME} echo ${env.GIT_MESSAGE}"
 
     if (BRANCH_NAME == 'devops_develop') {
         println "ta da!!"
+        WORK_NODE = "chstage-node"
     }
 
  sh 'printenv'
+}
+
+pipeline{
+
+    agent any
+
+    stages{
+        stage("test stage"){
+            steps{
+                echo "Bracnch: ${env.BRANCH_NAME} node: ${WORK_NODE} "
+            }
+        }
+    }
+}
 
     //println BRANCH_NAME //"Branch ${env.BRANCH_NAME}"
 
