@@ -9,8 +9,9 @@ stage("Select a target node lable") {
         if (BRANCH_NAME == 'devops_develop') {
             WORK_NODE = 'chstage-node'
         } else if (BRANCH_NAME == 'devops_prod') {
-            WORK_NODE = 'chstage-node'
+            WORK_NODE = 'chprod-node'
         }
+
         echo "end prepare the Node is ${WORK_NODE}..."
         sh 'printenv'
     }
@@ -20,10 +21,9 @@ node(WORK_NODE){
 
   stage("0 of 3 Set environment"){
     //Local paths
-    sh "cd ../"
-    CURR_DIR = pwd()
+    env.WORKSPACE="/home/jenkins/ch-stage/workspace/ch-server"
     WS_DIR = "ch-server"
-    WORK_DIR = "${CURR_DIR}/${WS_DIR}" //"${BASE_DIR}/${WS_DIR}"
+    WORK_DIR = "${env.WORKSPACE}" //"${BASE_DIR}/${WS_DIR}"
     SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
     //MySQL config
@@ -51,7 +51,7 @@ node(WORK_NODE){
         def COMMIT_MESSAGE = commitMessage()
         slackSend(
           color: 'good',
-          message: "Start pipeline for {$env.BRANCH_NAME} on node {$env.NODE_NAME} commit message: '${COMMIT_MESSAGE}' Job description ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+message: "Start pipeline for ${env.BRANCH_NAME} on node ${env.NODE_NAME} commit message: '${COMMIT_MESSAGE}' Job description ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
         )
         echo "Start checkout on node: ${WORK_NODE}"
         checkout scm
