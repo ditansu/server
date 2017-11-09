@@ -2,11 +2,8 @@
 
 WORK_NODE = ''
 
-
 stage("Select a target node lable") {
-
     node('master') {
-
         echo "Start prepare..."
 
         if (BRANCH_NAME == 'devops_develop') {
@@ -18,7 +15,6 @@ stage("Select a target node lable") {
         sh 'printenv'
     }
 }
-
 
 node(WORK_NODE){
 
@@ -49,10 +45,19 @@ node(WORK_NODE){
   }
   stage("1 of 3 Checkout") {
       try{
+        def COMMIT_MESSAGE = commitMessage()
+        slackSend(
+          color: 'good',
+          message: "Start pipeline for {$env.BRANCH_NAME} on node {$env.NODE_NAME} commit: ${COMMIT_MESSAGE} ${env.GIT_COMMIT} ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+        )
         echo "Start checkout on node: ${WORK_NODE}"
         checkout scm
         echo "Copy ${MYSQL_CONFIG} to ${SERVER_CONFIG_DIR}"
         sh "cp ${MYSQL_CONFIG} ${SERVER_CONFIG_DIR}"
+        slackSend(
+          color: 'good',
+          message: "1 of 3 Chekout SUCCESS :smiley:"
+        )
       }catch(err) {
         println(err.getMessage());
         throw err
@@ -62,12 +67,70 @@ node(WORK_NODE){
   stage("2 of 3 Build"){
       try{
          echo "Start build: '${VAPOR} build ${BUILD_PARAM}"
-         sh "$VAPOR build $BUILD_PARAM"
+         ansiColor('xterm') {
+           sh "$VAPOR build $BUILD_PARAM"
+         }
+        slackSend(
+          color: 'good',
+          message: "2 of 3 Build SUCCESS :smiley:"
+        )
       }catch(err) {
+        slackSend(
+          color: 'danger',
+          message: "2 of 3 Build FAILED :scream:"
+        )
         println(err.getMessage());
         throw err
       }
   }
 
+  stage("3 of 3 Deploy"){
+    try{
+      echo "Start deploy by script ${DEPLOY_SCRIPT}"
+      sh "$DEPLOY_SCRIPT"
+      currentBuild.result = 'SUCCESS'
+      slackSend(
+        color: 'good',
+        message: "3 of 3 Deploy ${env.DEPLOY_STATUS}"
+      )
 
+    }catch(err) {
+      slackSend(
+        color: 'danger',
+        message: "3 of 3 Deploy FAILED :scream:"
+      )
+      println(err.getMessage());
+      throw err
+    }
+  }
+
+  if(env.DEPLOY_STATUS == 'FAILURE') {
+    stage("ROLLBACK"){
+      try{
+        echo "Start rollback by ${ROLLBACK_SCRIPT}"
+        sh "$ROLLBACK_SCRIPT"
+        currentBuild.result = 'FAILURE'
+        slackSend(
+          color: 'danger',
+          message: "Deploy failed but Rollback is SUCCESS :grimacing:"
+        )
+
+    } catch(err) {
+        slackSend(
+          color: 'danger',
+          message: "Deploy FAILED and Rollback is FAILED :scream:"
+        )
+        println(err.getMessage());
+        throw err
+    }
+  }
 }
+
+
+def commitMessage() {
+  sh 'git log --format=%B -n 1 HEAD > commitMessage'
+  def commitMessage = readFile('commitMessage')
+  sh 'rm commitMessage'
+  commitMessage
+}
+
