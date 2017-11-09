@@ -19,8 +19,8 @@ stage("Prepare") {
 
 stage("1 of 3 Checkout") {
 
-    node("$(WORK_NODE}"){
-    echo "Start checkout on node: $(WORK_NODE}..."
+    node(env.WORK_NODE){
+        echo "Start checkout on node: ${WORK_NODE}..."
         //checkout scm
         echo "========================"
         sh 'printenv'
