@@ -18,6 +18,16 @@ pipeline{
 
     agent any
 
+    script{
+
+        if (BRANCH_NAME == 'devops_develop') {
+            println "ta da!!"
+            WORK_NODE = "chstage-node"
+        }
+
+        sh "echo NODE: ${env.WORK_NODE}
+    }
+
     stages{
         stage("test stage"){
             steps{
