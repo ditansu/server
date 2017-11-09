@@ -115,13 +115,14 @@ node(WORK_NODE){
           message: "Deploy failed but Rollback is SUCCESS :grimacing:"
         )
 
-    } catch(err) {
+      } catch(err) {
         slackSend(
           color: 'danger',
           message: "Deploy FAILED and Rollback is FAILED :scream:"
         )
         println(err.getMessage());
         throw err
+      }
     }
   }
 }
