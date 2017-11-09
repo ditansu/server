@@ -2,6 +2,7 @@
 
 WORK_NODE = ''
 
+
 stage("Prepare") {
 
     node('master') {
@@ -18,11 +19,14 @@ stage("Prepare") {
     }
 }
 
-stage("1 of 3 Checkout") {
 
-    node(WORK_NODE){
+node(WORK_NODE){
+  WORK_DIR = ''
+  MYSQL_CONFIG = "/home/jenkins/ch-stage/scripts/mysql.json"
 
-        def WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
+  stage("1 of 3 Checkout") {
+
+        WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
         def SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
         //MySQL config
@@ -33,13 +37,18 @@ stage("1 of 3 Checkout") {
         def VAPOR = "/usr/local/bin/vapor"
         def BUILD_PARAM = "--verbose --release"
 
-        echo "Start checkout on node: ${WORK_NODE}..."
+        echo "Start checkout on node: ${WORK_NODE}"
         checkout scm
         echo "========================"
         sh 'printenv'
         echo "========================"
 
     }
+
+  stage("2 of 3 Buil"){
+      echo "WORK DIR ${WORK_DIR}, ${env.WORK_DIR}"
+      echo "Script dir ${SCRIPTS_DIR}, ${env.SCRIPTS_DIR}"
+  }
 
 }
 
