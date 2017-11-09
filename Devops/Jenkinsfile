@@ -36,7 +36,7 @@ node(WORK_NODE){
     BUILD_PARAM = "--verbose --release"
 
     //Deploy config
-    env.CH_BUILD = "${WORK_DIR}"  // export to scripts
+    env.CH_BUILD = "${env.WORKSPACE}"  // export to scripts
     env.CH_WEBROOT = "/var/www/stage" // export to scripts
     DEPLOY_SCRIPT  = "/usr/bin/sudo -E ${SCRIPTS_DIR}/deploy-build.sh"
     ROLLBACK_SCRIPT = "/usr/bin/sudo -E ${SCRIPTS_DIR}/rollback.sh"
@@ -52,7 +52,7 @@ node(WORK_NODE){
         echo "Start checkout on node: ${WORK_NODE}"
         checkout scm
         echo "Copy ${MYSQL_CONFIG} to ${SERVER_CONFIG_DIR}"
-        sh 'cp $MYSQL_CONFIG $SERVER_CONFIG_DIR'
+        sh "cp ${MYSQL_CONFIG} ${SERVER_CONFIG_DIR}"
       }catch(err) {
         println(err.getMessage());
         throw err
@@ -62,7 +62,7 @@ node(WORK_NODE){
   stage("2 of 3 Build"){
       try{
          echo "Start build: '${VAPOR} build ${BUILD_PARAM}"
-         sh '$VAPOR build $BUILD_PARAM'
+         sh "$VAPOR build $BUILD_PARAM"
       }catch(err) {
         println(err.getMessage());
         throw err
