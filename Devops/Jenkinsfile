@@ -1,12 +1,12 @@
 #!groovy
 
+WORK_NODE = ''
+
 stage("Prepare") {
 
     node('master') {
 
         echo "Start prepare..."
-        def WORK_NODE = ''
-
 
         if (BRANCH_NAME == 'devops_develop') {
             WORK_NODE = 'chstage-node'
@@ -20,20 +20,20 @@ stage("Prepare") {
 
 stage("1 of 3 Checkout") {
 
-    node(env.WORK_NODE){
+    node(WORK_NODE){
 
-        WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
-        SCRIPTS_DIR = "${WORK_DIR}/Devops"
+        def WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
+        def SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
         //MySQL config
-        MYSQL_CONFIG = "/home/jenkins/ch-stage/scripts/mysql.json"
-        SERVER_CONFIG_DIR = "${WORK_DIR}/Config/secrets/"
+        def MYSQL_CONFIG = "/home/jenkins/ch-stage/scripts/mysql.json"
+        def SERVER_CONFIG_DIR = "${WORK_DIR}/Config/secrets/"
 
         //Build config
-        VAPOR = "/usr/local/bin/vapor"
-        BUILD_PARAM = "--verbose --release"
+        def VAPOR = "/usr/local/bin/vapor"
+        def BUILD_PARAM = "--verbose --release"
 
-        echo "Start checkout on node: ${env.WORK_NODE}..."
+        echo "Start checkout on node: ${WORK_NODE}..."
         checkout scm
         echo "========================"
         sh 'printenv'
