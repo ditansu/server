@@ -1,33 +1,33 @@
 #!groovy
 
-stage "Prepare"
+stage("Prepare") {
 
-node {
+    node('master') {
 
-    echo "Start prepare..."
-    def WORK_NODE = ''
+        echo "Start prepare..."
+        def WORK_NODE = ''
 
-    if (BRANCH_NAME == 'devops_develop') {
-        WORK_NODE = 'chstage-node'
-    } else if (BRANCH_NAME == 'devops_prod') {
-        WORK_NODE = 'chstage-node'
+        if (BRANCH_NAME == 'devops_develop') {
+            WORK_NODE = 'chstage-node'
+        } else if (BRANCH_NAME == 'devops_prod') {
+            WORK_NODE = 'chstage-node'
+        }
+        echo "end prepare the Node is ${WORK_NODE}..."
+        sh 'printenv'
+    }
+}
+
+stage("1 of 3 Checkout") {
+
+    node("$(WORK_NODE}"){
+    echo "Start checkout on node: $(WORK_NODE}..."
+        //checkout scm
+        echo "========================"
+        sh 'printenv'
+        echo "========================"
     }
 
-    echo "end prepare the Node is {$WORK_NODE}..."
-    sh 'printenv'
 }
-
-stage "1 of 3 Checkout"
-
-node(WORK_NODE){
-    echo "Start checkout on node: {$WORK_NODE}..."
-    checkout scm
-    echo "========================"
-    sh 'printenv'
-    echo "========================"
-}
-
-
 
     //println BRANCH_NAME //"Branch ${env.BRANCH_NAME}"
 
