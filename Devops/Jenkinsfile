@@ -7,6 +7,7 @@ stage("Prepare") {
         echo "Start prepare..."
         def WORK_NODE = ''
 
+
         if (BRANCH_NAME == 'devops_develop') {
             WORK_NODE = 'chstage-node'
         } else if (BRANCH_NAME == 'devops_prod') {
@@ -20,11 +21,24 @@ stage("Prepare") {
 stage("1 of 3 Checkout") {
 
     node(env.WORK_NODE){
-        echo "Start checkout on node: ${WORK_NODE}..."
-        //checkout scm
+
+        WORK_DIR = pwd() //"${BASE_DIR}/${WS_DIR}"
+        SCRIPTS_DIR = "${WORK_DIR}/Devops"
+
+        //MySQL config
+        MYSQL_CONFIG = "/home/jenkins/ch-stage/scripts/mysql.json"
+        SERVER_CONFIG_DIR = "${WORK_DIR}/Config/secrets/"
+
+        //Build config
+        VAPOR = "/usr/local/bin/vapor"
+        BUILD_PARAM = "--verbose --release"
+
+        echo "Start checkout on node: ${env.WORK_NODE}..."
+        checkout scm
         echo "========================"
         sh 'printenv'
         echo "========================"
+
     }
 
 }
