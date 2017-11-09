@@ -1,46 +1,38 @@
 #!groovy
 
+stage "Prepare"
+
 node {
-    println "Hello world from di!"
+
+    echo "Start prepare..."
     def WORK_NODE = ''
-    println "Branch ${env.BRANCH_NAME}"
-    sh "echo ${env.BRANCH_NAME} echo ${env.GIT_MESSAGE}"
 
     if (BRANCH_NAME == 'devops_develop') {
-        println "ta da!!"
-        WORK_NODE = "chstage-node"
+        WORK_NODE = 'chstage-node'
+    } else if (BRANCH_NAME == 'devops_prod') {
+        WORK_NODE = 'chstage-node'
     }
 
- sh 'printenv'
+    echo "end prepare the Node is {$WORK_NODE}..."
+    sh 'printenv'
 }
 
-pipeline{
+stage "1 of 3 Checkout"
 
-    agent any
-
-    script{
-
-        if (BRANCH_NAME == 'devops_develop') {
-            println "ta da!!"
-            WORK_NODE = "chstage-node"
-        }
-
-        sh "echo NODE: ${env.WORK_NODE}"
-    }
-
-    stages{
-        stage("test stage"){
-            steps{
-                echo "Bracnch: ${env.BRANCH_NAME} node: ${env.WORK_NODE} "
-            }
-        }
-    }
+node(WORK_NODE){
+    echo "Start checkout on node: {$WORK_NODE}..."
+    checkout scm
+    echo "========================"
+    sh 'printenv'
+    echo "========================"
 }
+
+
 
     //println BRANCH_NAME //"Branch ${env.BRANCH_NAME}"
 
 /*
-    if (env.GIT_BRANCH.consits("develop")){  // 'origin/devops_develop'
+    if (env.GIT_BRANCH.consits("develop")){
         WORK_NODE = "chstage-node"
     } else {
         WORK_NODE = "chprod-node"
