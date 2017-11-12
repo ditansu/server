@@ -18,7 +18,8 @@ stage("Select a target node lable") {
 }
 
 node(WORK_NODE){
-
+ ws("/home/jenkins/ch-stage/workspace/ch-server") {
+    
   stage("0 of 3 Set environment"){
     //Local paths
     env.WORKSPACE="/home/jenkins/ch-stage/workspace/ch-server"
@@ -51,7 +52,7 @@ node(WORK_NODE){
         def COMMIT_MESSAGE = commitMessage()
         slackSend(
           color: 'good',
-message: "Start pipeline for ${env.BRANCH_NAME} on node ${env.NODE_NAME} commit message: '${COMMIT_MESSAGE}' Job description ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+          message: "Start pipeline for ${env.BRANCH_NAME} on node ${env.NODE_NAME} commit message: '${COMMIT_MESSAGE}' Job description ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
         )
         echo "Start checkout on node: ${WORK_NODE}"
         checkout scm
@@ -65,8 +66,7 @@ message: "Start pipeline for ${env.BRANCH_NAME} on node ${env.NODE_NAME} commit 
         println(err.getMessage());
         throw err
       }
-    }
-
+  }
   stage("2 of 3 Build"){
       try{
          echo "Start build: '${VAPOR} build ${BUILD_PARAM}"
@@ -96,7 +96,7 @@ message: "Start pipeline for ${env.BRANCH_NAME} on node ${env.NODE_NAME} commit 
         color: 'good',
         message: "3 of 3 Deploy ${env.DEPLOY_STATUS}"
       )
-
+    
     }catch(err) {
       slackSend(
         color: 'danger',
@@ -128,7 +128,9 @@ message: "Start pipeline for ${env.BRANCH_NAME} on node ${env.NODE_NAME} commit 
       }
     }
   }
-}
+  
+ }// workspace
+}//node
 
 
 def commitMessage() {
