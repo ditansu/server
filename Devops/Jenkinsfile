@@ -123,7 +123,7 @@ node(WORK_NODE){
   } else {
     slackSend(
       color: 'good',
-      message: "3 of 3 Deploy SUCCESS :grimacing: :rocket:"
+      message: "3 of 3 Deploy SUCCESS :smiley: :rocket:"
     )
   }
   
