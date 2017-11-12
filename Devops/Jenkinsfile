@@ -22,15 +22,13 @@ node(WORK_NODE){
     
   stage("0 of 3 Set environment"){
     //Local paths
-    env.WORKSPACE="/home/jenkins/ch-stage/workspace/ch-server"
-    WS_DIR = "ch-server"
-    WORK_DIR = "${env.WORKSPACE}" //"${BASE_DIR}/${WS_DIR}"
+    WORK_DIR = "${env.WORKSPACE}"
     SCRIPTS_DIR = "${WORK_DIR}/Devops"
 
     //MySQL config
     MYSQL_CONFIG = "/home/jenkins/ch-stage/scripts/mysql.json"
     SERVER_CONFIG_DIR = "${WORK_DIR}/Config/secrets/"
-
+    
     //Build config
     VAPOR = "/usr/local/bin/vapor"
     BUILD_PARAM = "--verbose --release"
@@ -92,11 +90,6 @@ node(WORK_NODE){
       echo "Start deploy by script ${DEPLOY_SCRIPT}"
       sh "$DEPLOY_SCRIPT"
       currentBuild.result = 'SUCCESS'
-      slackSend(
-        color: 'good',
-        message: "3 of 3 Deploy ${env.DEPLOY_STATUS}"
-      )
-    
     }catch(err) {
       slackSend(
         color: 'danger',
@@ -127,6 +120,11 @@ node(WORK_NODE){
         throw err
       }
     }
+  } else {
+    slackSend(
+      color: 'good',
+      message: "3 of 3 Deploy SUCCESS :grimacing: :rocket:"
+    )
   }
   
  }// workspace
