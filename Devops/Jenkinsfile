@@ -9,11 +9,12 @@ stage("Select a target node lable") {
   node('master') {
     echo "Start prepare..."
     WORK_NODE = select_node()
-    echo " end prepare the Node is ${WORK_NODE}..."
+    echo "end prepare the Node is ${WORK_NODE}..."
   }
 }
 
 node(WORK_NODE){
+ 
  ws(WORK_SPACE) {
   
   setenv()
@@ -44,6 +45,9 @@ def select_node(){
       break
     case MASTER_BRANCH:
       work_node = 'chprod-node'
+      break
+    default:
+      work_node = 'chstage-node'
       break
   }
   work_node
@@ -81,19 +85,18 @@ def checkout(){
   stage("Checkout") {
     try{
       echo "Start checkout on node: ${WORK_NODE}"
-  
       checkout scm
-    
       def COMMIT_MESSAGE = commitMessage()
+    
       slackSend(
-      color: 'good',
-      message: "Start pipeline for '${env.BRANCH_NAME}' on node '${env.NODE_NAME}' commit message: '${COMMIT_MESSAGE}' Job description ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+        color: 'good',
+        message: "Start pipeline for '${env.BRANCH_NAME}' on node '${env.NODE_NAME}' commit message: '${COMMIT_MESSAGE}' Job description: ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
       )
     
       echo "Copy ${MYSQL_CONFIG} to ${SERVER_CONFIG_DIR}"
       sh "cp ${MYSQL_CONFIG} ${SERVER_CONFIG_DIR}"
       slackSend( color: 'good', message: "Chekout SUCCESS :smiley:")
-    
+
     }catch(err) {
       slackSend(color: 'danger', message: "Chekout FAILED :scream:" )
       println(err.getMessage());
@@ -119,7 +122,7 @@ def build() {
 }
 
 def deploy() {
-  stage("3 of 3 Deploy"){
+  stage("Deploy"){
     try{
       echo "Start deploy by script ${DEPLOY_SCRIPT}"
       sh "$DEPLOY_SCRIPT"
