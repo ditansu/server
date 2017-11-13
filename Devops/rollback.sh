@@ -1,6 +1,8 @@
 #!/bin/bash
+# CocoaHeads Ru
 # Description: this is the shell script for the cocoaheadsru server deploy and start 
 # Author:  Dmitry, ditansu@gmail.com
+
 
 ##SETINGS
 
