@@ -12,7 +12,7 @@ stage("Select a target node lable") {
         } else if (BRANCH_NAME == 'devops_prod') {
             WORK_NODE = 'chprod-node'
         }
-        echo "end prepare the Node is ${WORK_NODE}..."
+        echo " end prepare the Node is ${WORK_NODE}..."
     }
 }
 
@@ -44,6 +44,7 @@ node(WORK_NODE){
     sh 'printenv'
     echo "========================"
   }
+  
   stage("1 of 3 Checkout") {
       try{
         echo "Start checkout on node: ${WORK_NODE}"
@@ -60,12 +61,12 @@ node(WORK_NODE){
         slackSend( color: 'good', message: "1 of 3 Chekout SUCCESS :smiley:")
     
       }catch(err) {
-    
         slackSend(color: 'danger', message: "1 of 3 Chekout FAILED :scream:" )
         println(err.getMessage());
         throw err
       }
   }
+  
   stage("2 of 3 Build"){
       try{
          echo "Start build: '${VAPOR} build ${BUILD_PARAM}"

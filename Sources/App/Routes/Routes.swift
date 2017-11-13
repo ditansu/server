@@ -3,7 +3,7 @@ import Vapor
 extension Droplet {
     func setupRoutes() throws {
         
-        let testVersion = 55
+        let testVersion = 56
       
         get("hello") { req in
             var json = JSON()
