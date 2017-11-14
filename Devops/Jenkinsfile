@@ -8,50 +8,68 @@ MASTER_BRANCH = 'devops_prod'
 stage("Select a target node lable") {
   node('master') {
     echo "Start prepare..."
-    WORK_NODE = select_node()
+    
+    switch(BRANCH_NAME) {
+    case DEVELOP_BRANCH:
+      WORK_NODE = 'chstage-node'
+      break
+    case MASTER_BRANCH:
+      WORK_NODE = 'chprod-node'
+      break
+    default:
+      WORK_NODE = 'master'
+      break
+    }
+    
+    
+    
     echo "end prepare the Node is ${WORK_NODE}..."
   }
 }
 
-node(WORK_NODE){
- 
- ws(WORK_SPACE) {
-  
-  setenv()
-  checkout()
-  build()
-  deploy()
-  
-  if(env.DEPLOY_STATUS == 'FAILURE') {
-    rollback()
-  } else {
-    slackSend( color: 'good', message: "Deploy SUCCESS :smiley: :rocket:")
+//if master of devlop commit
+if(WORK_NODE != 'master'){
+  node(WORK_NODE){
+    ws(WORK_SPACE) {
+      setenv()
+      checkout()
+      build()
+      deploy()
+      if(env.DEPLOY_STATUS == 'FAILURE') {
+        rollback()
+      } else {
+        slackSend( color: 'good', message: "Deploy SUCCESS :smiley: :rocket:")
+      }
+    }// workspace
+  }//node
+} else {
+  // check Pull Request
+  node('chstage-node'){
+    stage("checkout"){
+      checkout scm
+      def COMMIT_MESSAGE = commitMessage()
+      
+      slackSend(
+        color: 'good',
+        message: "Start pipeline for '${env.BRANCH_NAME}' on node '${env.NODE_NAME}' commit message: '${COMMIT_MESSAGE}' Job description: ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+      )
+    }
+    
+    stage("check codestyle"){
+      
+      sh '/usr/local/bin/swiftlint lint --reporter checkstyle > checkstyle-result.xml || true'
+      checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'checkstyle-result.xml', unHealthy: ''
+      slackSend( color: 'good', message: "Check codestyle if done :smiley:")
+    }
   }
   
- }// workspace
-}//node
-
-
-//===============================================================================================================
-//===============================================================================================================
-//===============================================================================================================
-
-
-def select_node(){
-  def work_node = 'nil'
-  switch(BRANCH_NAME) {
-    case DEVELOP_BRANCH:
-      work_node = 'chstage-node'
-      break
-    case MASTER_BRANCH:
-      work_node = 'chprod-node'
-      break
-    default:
-      work_node = 'chstage-node'
-      break
-  }
-  work_node
+  
 }
+
+//===============================================================================================================
+//===============================================================================================================
+//===============================================================================================================
+
 
 def setenv() {
   stage("Set environment"){
