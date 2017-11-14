@@ -56,10 +56,11 @@ if(WORK_NODE != 'master'){
     }
     
     stage("check codestyle"){
-      
+      //start
       sh '/usr/local/bin/swiftlint lint --reporter checkstyle > checkstyle-result.xml || true'
       checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'checkstyle-result.xml', unHealthy: ''
       slackSend( color: 'good', message: "Check codestyle if done :smiley:")
+      
     }
   }
   
