@@ -1,4 +1,7 @@
 #!groovy
+// useful links
+// https://dzone.com/articles/build-your-pipeline-in-jenkins-20-as-code-with-ios
+// https://gist.github.com/jonico/e205b16cf07451b2f475543cf1541e70
 
 WORK_NODE = 'nil'
 WORK_SPACE = "/home/jenkins/ch-stage/workspace/ch-server"
@@ -20,8 +23,6 @@ stage("Select a target node lable") {
       WORK_NODE = 'master'
       break
     }
-    
-    
     
     echo "end prepare the Node is ${WORK_NODE}..."
   }
@@ -59,7 +60,7 @@ if(WORK_NODE != 'master'){
       //start
       sh '/usr/local/bin/swiftlint lint --reporter checkstyle > checkstyle-result.xml || true'
       checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: 'checkstyle-result.xml', unHealthy: ''
-      slackSend( color: 'good', message: "Check codestyle if done :smiley:")
+      slackSend( color: 'good', message: "Codestyle checking is done :smiley:")
       
     }
   }
