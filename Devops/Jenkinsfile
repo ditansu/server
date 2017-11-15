@@ -51,7 +51,7 @@ if(WORK_NODE != 'master'){
       
       slackSend(
         color: 'good',
-        message: "Start pipeline for '${env.BRANCH_NAME}' on node '${env.NODE_NAME}' commit message: '${COMMIT_MESSAGE}' Job description: ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
+        message: "Start PR codestyle check for '${env.BRANCH_NAME}' on node '${env.NODE_NAME}' commit message: '${COMMIT_MESSAGE}' Job description: ${env.JOB_NAME} ${env.BUILD_NUMBER} ${env.BUILD_URL}"
       )
     }
     
