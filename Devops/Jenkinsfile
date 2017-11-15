@@ -5,8 +5,8 @@
 
 WORK_NODE = 'nil'
 WORK_SPACE = "/home/jenkins/ch-stage/workspace/ch-server"
-DEVELOP_BRANCH = 'devops_develop'
-MASTER_BRANCH = 'devops_prod'
+DEVELOP_BRANCH = 'develop'
+MASTER_BRANCH = 'master'
 
 stage("Select a target node lable") {
   node('master') {
