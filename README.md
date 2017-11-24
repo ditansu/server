@@ -44,7 +44,7 @@ Start mysql server
 mysql.server start
 
 ```
-Create database
+Create database dd
 
 ```
 mysql -u root
